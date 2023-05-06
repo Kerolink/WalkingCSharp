@@ -1,4 +1,4 @@
-﻿//Unidad 2 Ejercicio 1
+﻿//Unidad 2 Ejercicio 2
 //string studentName = "Sophia Johnson";
 string course1Name = "English 101";
 string course2Name = "Algebra 101";
@@ -20,6 +20,22 @@ int course2Grade = gradeB;
 int course3Grade = gradeB;
 int course4Grade = gradeB;
 int course5Grade = gradeA;
+
+int totalCreditHours = 0;
+totalCreditHours += course1Credit;
+totalCreditHours += course2Credit;
+totalCreditHours += course3Credit;
+totalCreditHours += course4Credit;
+totalCreditHours += course5Credit;
+
+int totalGradePoints = 0;
+totalGradePoints += course1Credit * course1Grade;
+totalGradePoints += course2Credit * course2Grade;
+totalGradePoints += course3Credit * course3Grade;
+totalGradePoints += course4Credit * course4Grade;
+totalGradePoints += course5Credit * course5Grade;
+
+Console.WriteLine($"{totalGradePoints} {totalCreditHours}");
 
 Console.WriteLine($"{course1Name} {course1Grade} {course1Credit}");
 Console.WriteLine($"{course2Name} {course2Grade} {course2Credit}");
