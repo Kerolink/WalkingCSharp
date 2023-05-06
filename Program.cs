@@ -1,4 +1,4 @@
-﻿//Unidad 1 Ejercicio1
+﻿//Unidad 1 Ejercicio 1
 int currentAssignments = 5;
 
 int sophia1 = 93;
