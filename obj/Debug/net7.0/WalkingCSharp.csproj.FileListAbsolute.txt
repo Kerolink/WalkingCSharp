@@ -1,0 +1,15 @@
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\bin\Debug\net7.0\WalkingCSharp.exe
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\bin\Debug\net7.0\WalkingCSharp.deps.json
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\bin\Debug\net7.0\WalkingCSharp.runtimeconfig.json
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\bin\Debug\net7.0\WalkingCSharp.dll
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\bin\Debug\net7.0\WalkingCSharp.pdb
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\obj\Debug\net7.0\WalkingCSharp.csproj.AssemblyReference.cache
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\obj\Debug\net7.0\WalkingCSharp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\obj\Debug\net7.0\WalkingCSharp.AssemblyInfoInputs.cache
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\obj\Debug\net7.0\WalkingCSharp.AssemblyInfo.cs
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\obj\Debug\net7.0\WalkingCSharp.csproj.CoreCompileInputs.cache
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\obj\Debug\net7.0\WalkingCSharp.dll
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\obj\Debug\net7.0\refint\WalkingCSharp.dll
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\obj\Debug\net7.0\WalkingCSharp.pdb
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\obj\Debug\net7.0\WalkingCSharp.genruntimeconfig.cache
+C:\Users\Kerol\Desktop\EOI\Desarrollo Cloud\Fundamentos de Programación\03 C#\WalkingCSharp\obj\Debug\net7.0\ref\WalkingCSharp.dll
