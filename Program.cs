@@ -1,4 +1,4 @@
-﻿//Unidad 6 Ejercicio 1
+﻿//Unidad 6 Ejercicio 2
 /*
 This application manages transactions at a store check-out line. The
 check-out line has a cash register, and the register has a cash till
@@ -17,7 +17,6 @@ money in the till is performed in the "main program". This safety check
 is used to ensure that logic in the MakeChange method is working as 
 expected.
 */
-
 
 string? readResult = null;
 bool useTestData = false;
@@ -49,7 +48,7 @@ Console.WriteLine();
 
 var valueGenerator = new Random((int)DateTime.Now.Ticks);
 
-int transactions = 40;
+int transactions = 100;
 
 if (useTestData)
 {
@@ -89,7 +88,7 @@ while (transactions > 0)
     }
     catch (InvalidOperationException e)
     {
-        Console.WriteLine($"Could not make transaction: {e.Message}");
+        Console.WriteLine($"Could not complete transaction: {e.Message}");
     }
 
     Console.WriteLine(TillAmountSummary(cashTill));
@@ -116,49 +115,54 @@ static void LoadTillEachMorning(int[,] registerDailyStartingCash, int[] cashTill
 
 static void MakeChange(int cost, int[] cashTill, int twenties, int tens = 0, int fives = 0, int ones = 0)
 {
-    cashTill[3] += twenties;
-    cashTill[2] += tens;
-    cashTill[1] += fives;
-    cashTill[0] += ones;
+    int availableTwenties = cashTill[3] + twenties;
+    int availableTens = cashTill[2] + tens;
+    int availableFives = cashTill[1] + fives;
+    int availableOnes = cashTill[0] + ones;
 
     int amountPaid = twenties * 20 + tens * 10 + fives * 5 + ones;
     int changeNeeded = amountPaid - cost;
 
     if (changeNeeded < 0)
-        throw new InvalidOperationException("Not enough money provided");
+        throw new InvalidOperationException("InvalidOperationException: Not enough money provided to complete the transaction.");
 
-    Console.WriteLine("Cashier Returns:");
+    Console.WriteLine("Cashier prepares the following change:");
 
-    while ((changeNeeded > 19) && (cashTill[3] > 0))
+    while ((changeNeeded > 19) && (availableTwenties > 0))
     {
-        cashTill[3]--;
+        availableTwenties--;
         changeNeeded -= 20;
         Console.WriteLine("\t A twenty");
     }
 
-    while ((changeNeeded > 9) && (cashTill[2] > 0))
+    while ((changeNeeded > 9) && (availableTens > 0))
     {
-        cashTill[2]--;
+        availableTens--;
         changeNeeded -= 10;
         Console.WriteLine("\t A ten");
     }
 
-    while ((changeNeeded > 4) && (cashTill[1] > 0))
+    while ((changeNeeded > 4) && (availableFives > 0))
     {
-        cashTill[1]--;
+        availableFives--;
         changeNeeded -= 5;
         Console.WriteLine("\t A five");
     }
 
-    while ((changeNeeded > 0) && (cashTill[0] > 0))
+    while ((changeNeeded > 0) && (availableOnes > 0))
     {
-        cashTill[0]--;
+        availableOnes--;
         changeNeeded -= 1;
         Console.WriteLine("\t A one");
     }
 
     if (changeNeeded > 0)
-        throw new InvalidOperationException("Can't make change. Do you have anything smaller?");
+        throw new InvalidOperationException("InvalidOperationException: The till is unable to make change for the cash provided.");
+
+    cashTill[0] = availableOnes;
+    cashTill[1] = availableFives;
+    cashTill[2] = availableTens;
+    cashTill[3] = availableTwenties;
 
 }
 
