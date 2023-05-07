@@ -1,165 +1,179 @@
-﻿//Unidad 5 Ejercicio 2
-using System;
+﻿//Unidad 6 Ejercicio 1
+/*
+This application manages transactions at a store check-out line. The
+check-out line has a cash register, and the register has a cash till
+that is prepared with a number of bills each morning. The till includes
+bills of four denominations: $1, $5, $10, and $20. The till is used
+to provide the customer with change during the transaction. The item 
+cost is a randomly generated number between 2 and 49. The customer 
+offers payment based on an algorithm that determines a number of bills
+in each denomination. 
 
-Random random = new Random();
-Console.CursorVisible = false;
-int height = Console.WindowHeight - 1;
-int width = Console.WindowWidth - 5;
-bool shouldExit = false;
+Each day, the cash till is loaded at the start of the day. As transactions
+occur, the cash till is managed in a method named MakeChange (customer 
+payments go in and the change returned to the customer comes out). A 
+separate "safety check" calculation that's used to verify the amount of
+money in the till is performed in the "main program". This safety check
+is used to ensure that logic in the MakeChange method is working as 
+expected.
+*/
 
-// Console position of the player
-int playerX = 0;
-int playerY = 0;
 
-// Console position of the food
-int foodX = 0;
-int foodY = 0;
+string? readResult = null;
+bool useTestData = false;
 
-// Available player and food strings
-string[] states = { "('-')", "(^-^)", "(X_X)" };
-string[] foods = { "@@@@@", "$$$$$", "#####" };
+Console.Clear();
 
-// Current player string displayed in the Console
-string player = states[0];
+int[] cashTill = new int[] { 0, 0, 0, 0 };
+int registerCheckTillTotal = 0;
 
-// Index of the current food
-int food = 0;
+// registerDailyStartingCash: $1 x 50, $5 x 20, $10 x 10, $20 x 5 => ($350 total)
+int[,] registerDailyStartingCash = new int[,] { { 1, 50 }, { 5, 20 }, { 10, 10 }, { 20, 5 } };
 
-InitializeGame();
-while (!shouldExit)
+int[] testData = new int[] { 6, 10, 17, 20, 31, 36, 40, 41 };
+int testCounter = 0;
+
+LoadTillEachMorning(registerDailyStartingCash, cashTill);
+
+registerCheckTillTotal = registerDailyStartingCash[0, 0] * registerDailyStartingCash[0, 1] + registerDailyStartingCash[1, 0] * registerDailyStartingCash[1, 1] + registerDailyStartingCash[2, 0] * registerDailyStartingCash[2, 1] + registerDailyStartingCash[3, 0] * registerDailyStartingCash[3, 1];
+
+// display the number of bills of each denomination currently in the till
+LogTillStatus(cashTill);
+
+// display a message showing the amount of cash in the till
+Console.WriteLine(TillAmountSummary(cashTill));
+
+// display the expected registerDailyStartingCash total
+Console.WriteLine($"Expected till value: {registerCheckTillTotal}");
+Console.WriteLine();
+
+var valueGenerator = new Random((int)DateTime.Now.Ticks);
+
+int transactions = 40;
+
+if (useTestData)
 {
-    if (TerminalResized())
+    transactions = testData.Length;
+}
+
+while (transactions > 0)
+{
+    transactions -= 1;
+    int itemCost = valueGenerator.Next(2, 50);
+
+    if (useTestData)
     {
-        Console.Clear();
-        Console.Write("Console was resized. Program exiting.");
-        shouldExit = true;
-    }
-    else
-    {
-        if (PlayerIsFaster())
-        {
-            Move(1, false);
-        }
-        else if (PlayerIsSick())
-        {
-            FreezePlayer();
-        }
-        else
-        {
-            Move(otherKeysExit: false);
-        }
-        if (GotFood())
-        {
-            ChangePlayer();
-            ShowFood();
-        }
-    }
-}
-
-// Returns true if the Terminal was resized 
-bool TerminalResized()
-{
-    return height != Console.WindowHeight - 1 || width != Console.WindowWidth - 5;
-}
-
-// Displays random food at a random location
-void ShowFood()
-{
-    // Update food to a random index
-    food = random.Next(0, foods.Length);
-
-    // Update food position to a random location
-    foodX = random.Next(0, width - player.Length);
-    foodY = random.Next(0, height - 1);
-
-    // Display the food at the location
-    Console.SetCursorPosition(foodX, foodY);
-    Console.Write(foods[food]);
-}
-
-// Returns true if the player location matches the food location
-bool GotFood()
-{
-    return playerY == foodY && playerX == foodX;
-}
-
-// Returns true if the player appearance represents a sick state
-bool PlayerIsSick()
-{
-    return player.Equals(states[2]);
-}
-
-// Returns true if the player appearance represents a fast state
-bool PlayerIsFaster()
-{
-    return player.Equals(states[1]);
-}
-
-// Changes the player to match the food consumed
-void ChangePlayer()
-{
-    player = states[food];
-    Console.SetCursorPosition(playerX, playerY);
-    Console.Write(player);
-}
-
-// Temporarily stops the player from moving
-void FreezePlayer()
-{
-    System.Threading.Thread.Sleep(1000);
-    player = states[0];
-}
-
-// Reads directional input from the Console and moves the player
-void Move(int speed = 1, bool otherKeysExit = false)
-{
-    int lastX = playerX;
-    int lastY = playerY;
-
-    switch (Console.ReadKey(true).Key)
-    {
-        case ConsoleKey.UpArrow:
-            playerY--;
-            break;
-        case ConsoleKey.DownArrow:
-            playerY++;
-            break;
-        case ConsoleKey.LeftArrow:
-            playerX -= speed;
-            break;
-        case ConsoleKey.RightArrow:
-            playerX += speed;
-            break;
-        case ConsoleKey.Escape:
-            shouldExit = true;
-            break;
-        default:
-            // Exit if any other keys are pressed
-            shouldExit = otherKeysExit;
-            break;
+        itemCost = testData[testCounter];
+        testCounter += 1;
     }
 
-    // Clear the characters at the previous position
-    Console.SetCursorPosition(lastX, lastY);
-    for (int i = 0; i < player.Length; i++)
+    int paymentOnes = itemCost % 2;                 // value is 1 when itemCost is odd, value is 0 when itemCost is even
+    int paymentFives = (itemCost % 10 > 7) ? 1 : 0; // value is 1 when itemCost ends with 8 or 9, otherwise value is 0
+    int paymentTens = (itemCost % 20 > 13) ? 1 : 0; // value is 1 when 13 < itemCost < 20 OR 33 < itemCost < 40, otherwise value is 0
+    int paymentTwenties = (itemCost < 20) ? 1 : 2;  // value is 1 when itemCost < 20, otherwise value is 2
+
+    // display messages describing the current transaction
+    Console.WriteLine($"Customer is making a ${itemCost} purchase");
+    Console.WriteLine($"\t Using {paymentTwenties} twenty dollar bills");
+    Console.WriteLine($"\t Using {paymentTens} ten dollar bills");
+    Console.WriteLine($"\t Using {paymentFives} five dollar bills");
+    Console.WriteLine($"\t Using {paymentOnes} one dollar bills");
+
+    try
     {
-        Console.Write(" ");
+        // MakeChange manages the transaction and updates the till 
+        MakeChange(itemCost, cashTill, paymentTwenties, paymentTens, paymentFives, paymentOnes);
+
+        // Backup Calculation - each transaction adds current "itemCost" to the till
+        registerCheckTillTotal += itemCost;
+    }
+    catch (InvalidOperationException e)
+    {
+        Console.WriteLine($"Could not make transaction: {e.Message}");
     }
 
-    // Keep player position within the bounds of the Terminal window
-    playerX = (playerX < 0) ? 0 : (playerX >= width ? width : playerX);
-    playerY = (playerY < 0) ? 0 : (playerY >= height ? height : playerY);
-
-    // Draw the player at the new location
-    Console.SetCursorPosition(playerX, playerY);
-    Console.Write(player);
+    Console.WriteLine(TillAmountSummary(cashTill));
+    Console.WriteLine($"Expected till value: {registerCheckTillTotal}");
+    Console.WriteLine();
 }
 
-// Clears the console, displays the food and player
-void InitializeGame()
+Console.WriteLine("Press the Enter key to exit");
+do
 {
-    Console.Clear();
-    ShowFood();
-    Console.SetCursorPosition(0, 0);
-    Console.Write(player);
+    readResult = Console.ReadLine();
+
+} while (readResult == null);
+
+
+static void LoadTillEachMorning(int[,] registerDailyStartingCash, int[] cashTill)
+{
+    cashTill[0] = registerDailyStartingCash[0, 1];
+    cashTill[1] = registerDailyStartingCash[1, 1];
+    cashTill[2] = registerDailyStartingCash[2, 1];
+    cashTill[3] = registerDailyStartingCash[3, 1];
+}
+
+
+static void MakeChange(int cost, int[] cashTill, int twenties, int tens = 0, int fives = 0, int ones = 0)
+{
+    cashTill[3] += twenties;
+    cashTill[2] += tens;
+    cashTill[1] += fives;
+    cashTill[0] += ones;
+
+    int amountPaid = twenties * 20 + tens * 10 + fives * 5 + ones;
+    int changeNeeded = amountPaid - cost;
+
+    if (changeNeeded < 0)
+        throw new InvalidOperationException("Not enough money provided");
+
+    Console.WriteLine("Cashier Returns:");
+
+    while ((changeNeeded > 19) && (cashTill[3] > 0))
+    {
+        cashTill[3]--;
+        changeNeeded -= 20;
+        Console.WriteLine("\t A twenty");
+    }
+
+    while ((changeNeeded > 9) && (cashTill[2] > 0))
+    {
+        cashTill[2]--;
+        changeNeeded -= 10;
+        Console.WriteLine("\t A ten");
+    }
+
+    while ((changeNeeded > 4) && (cashTill[1] > 0))
+    {
+        cashTill[1]--;
+        changeNeeded -= 5;
+        Console.WriteLine("\t A five");
+    }
+
+    while ((changeNeeded > 0) && (cashTill[0] > 0))
+    {
+        cashTill[0]--;
+        changeNeeded -= 1;
+        Console.WriteLine("\t A one");
+    }
+
+    if (changeNeeded > 0)
+        throw new InvalidOperationException("Can't make change. Do you have anything smaller?");
+
+}
+
+static void LogTillStatus(int[] cashTill)
+{
+    Console.WriteLine("The till currently has:");
+    Console.WriteLine($"{cashTill[3] * 20} in twenties");
+    Console.WriteLine($"{cashTill[2] * 10} in tens");
+    Console.WriteLine($"{cashTill[1] * 5} in fives");
+    Console.WriteLine($"{cashTill[0]} in ones");
+    Console.WriteLine();
+}
+
+static string TillAmountSummary(int[] cashTill)
+{
+    return $"The till has {cashTill[3] * 20 + cashTill[2] * 10 + cashTill[1] * 5 + cashTill[0]} dollars";
+
 }
